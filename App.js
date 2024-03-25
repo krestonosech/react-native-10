@@ -1,60 +1,109 @@
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Button, Text, View, FlatList } from 'react-native';
+import React, { useState } from 'react';
+import { View, Button, Text } from 'react-native';
 
-const Stack = createNativeStackNavigator();
+const HelloWorldComponent = () => {
+const [randomNumber, setRandomNumber] = useState(null);
 
-const contacts = [
-  { id: 1, name: 'Ванек', phone: '228-228-1337', address: 'улица пушкина' },
-  { id: 2, name: 'Вован', phone: '228-228-1337', address: 'дом колотушкина' },
-  { id: 2, name: 'Владос', phone: '228-228-1337', address: '))))))))' },
-];
+const generateRandomNumber = () => {
+const randomNum = Math.floor(Math.random() * 100) + 1;
+setRandomNumber(randomNum);
+};
+return (
+<View style={{
+backgroundColor: 'black',
+marginTop: 50,
+}}
+>
+<Text style={{
+display: 'flex',
+justifyContent: 'center',
+color: 'white',
+}}
+>
+Hello World
+</Text>
+<View
+style={{
+display: 'flex',
+justifyContent: 'center',
+width: '100%',
+height: 50,
+alignItems: 'center',
+backgroundColor: 'black'
+}}
+>
+<Text
+style={{
+fontSize: 17,
+color: 'white',
+}}
+>Приложение для генерации случайного числа</Text>
+<Text
+style={{
+fontSize: 17,
+color: 'white',
+}}
+>от 1 до 100</Text>
+</View>
+<View
+style={{
+display: 'flex',
+justifyContent: 'center',
+width: '100%',
+height: 100,
+alignItems: 'center',
+backgroundColor: 'black',
+}}
+>
+<Text style={{
+color: 'white',
+}}>Нажмите на кнопку ниже</Text>
+<Text style={{
+color: 'white',
+}}>для генерации числа</Text>
+</View>
+<View style={{
+borderWidth: 2,
+borderColor: 'white',
+borderRadius: 10,
+margin: 15,
+}}
+>
+<Button title="Сгенерировать" onPress={generateRandomNumber} />
+{randomNumber && <Text style={{
+color: 'white',
+display: 'flex',
+justifyContent: 'center',
+}}>Случайное число: {randomNumber}</Text>}
+</View>
+<View
+style={{
+display: 'flex',
+justifyContent: 'center',
+width: '100%',
+height: '70%',
+marginBottom: 0,
+alignItems: 'center',
+backgroundColor: 'black',
+}}
+>
+<Text style={{
+color: 'white',
+}}>Приложение может пользоваться любой</Text>
+<Text style={{
+color: 'white',
+}}>пятиклассник, при желании можно</Text>
+<Text style={{
+color: 'white',
+}}>усовершенствовать программу,</Text>
+<Text style={{
+color: 'black',
+}}>но мне лень))</Text>
+</View>
 
-const MyStack = () => {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ title: 'Контакты' }}
-        />
-        <Stack.Screen name="Профиль" component={ProfileScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+</View>
+
+);
 };
 
-const HomeScreen = ({ navigation }) => {
-  return (
-    <View>
-      <FlatList
-        data={contacts}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <Button
-            title={item.name}
-            onPress={() =>
-              navigation.navigate('Профиль', { contact: item })
-            }
-          />
-        )}
-      />
-    </View>
-  );
-};
-
-const ProfileScreen = ({ route }) => {
-  const { contact } = route.params;
-
-  return (
-    <View>
-      <Text>{contact.name}</Text>
-      <Text>{contact.phone}</Text>
-      <Text>{contact.address}</Text>
-    </View>
-  );
-};
-
-export default MyStack;
+export default HelloWorldComponent;

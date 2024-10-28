@@ -1,109 +1,103 @@
-import React, { useState } from 'react';
-import { View, Button, Text } from 'react-native';
+import React from "react";
+import { View, StyleSheet, Alert } from "react-native";
+import { GestureHandlerRootView, PinchGestureHandler, LongPressGestureHandler, PanGestureHandler } from "react-native-gesture-handler";
+import Animated, { useSharedValue, useAnimatedStyle } from "react-native-reanimated";
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const HelloWorldComponent = () => {
-const [randomNumber, setRandomNumber] = useState(null);
+const GestureIcon = ({ iconName, onLongPress, onPanGesture, onPinch }) => {
+  const translationX = useSharedValue(0);
+  const translationY = useSharedValue(0);
+  const scale = useSharedValue(1);
 
-const generateRandomNumber = () => {
-const randomNum = Math.floor(Math.random() * 100) + 1;
-setRandomNumber(randomNum);
-};
-return (
-<View style={{
-backgroundColor: 'black',
-marginTop: 50,
-}}
->
-<Text style={{
-display: 'flex',
-justifyContent: 'center',
-color: 'white',
-}}
->
-Hello World
-</Text>
-<View
-style={{
-display: 'flex',
-justifyContent: 'center',
-width: '100%',
-height: 50,
-alignItems: 'center',
-backgroundColor: 'black'
-}}
->
-<Text
-style={{
-fontSize: 17,
-color: 'white',
-}}
->Приложение для генерации случайного числа</Text>
-<Text
-style={{
-fontSize: 17,
-color: 'white',
-}}
->от 1 до 100</Text>
-</View>
-<View
-style={{
-display: 'flex',
-justifyContent: 'center',
-width: '100%',
-height: 100,
-alignItems: 'center',
-backgroundColor: 'black',
-}}
->
-<Text style={{
-color: 'white',
-}}>Нажмите на кнопку ниже</Text>
-<Text style={{
-color: 'white',
-}}>для генерации числа</Text>
-</View>
-<View style={{
-borderWidth: 2,
-borderColor: 'white',
-borderRadius: 10,
-margin: 15,
-}}
->
-<Button title="Сгенерировать" onPress={generateRandomNumber} />
-{randomNumber && <Text style={{
-color: 'white',
-display: 'flex',
-justifyContent: 'center',
-}}>Случайное число: {randomNumber}</Text>}
-</View>
-<View
-style={{
-display: 'flex',
-justifyContent: 'center',
-width: '100%',
-height: '70%',
-marginBottom: 0,
-alignItems: 'center',
-backgroundColor: 'black',
-}}
->
-<Text style={{
-color: 'white',
-}}>Приложение может пользоваться любой</Text>
-<Text style={{
-color: 'white',
-}}>пятиклассник, при желании можно</Text>
-<Text style={{
-color: 'white',
-}}>усовершенствовать программу,</Text>
-<Text style={{
-color: 'black',
-}}>но мне лень))</Text>
-</View>
+  const panStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateX: translationX.value },
+      { translateY: translationY.value },
+      { scale: scale.value },
+    ],
+  }));
 
-</View>
-
-);
+  return (
+    <PanGestureHandler onGestureEvent={(event) => {
+      translationX.value = event.translationX;
+      translationY.value = event.translationY;
+      if (onPanGesture) onPanGesture(event);
+    }}>
+      <PinchGestureHandler onPinchEvent={(event) => {
+        scale.value = event.scale;
+        if (onPinch) onPinch(event);
+      }}>
+        <LongPressGestureHandler onActivated={onLongPress}>
+          <Animated.View style={[styles.iconContainer, panStyle]}>
+            <Icon name={iconName} size={60} color="#000" />
+          </Animated.View>
+        </LongPressGestureHandler>
+      </PinchGestureHandler>
+    </PanGestureHandler>
+  );
 };
 
-export default HelloWorldComponent;
+export default function App() {
+  return (
+    <GestureHandlerRootView style={styles.container}>
+      <View style={styles.iconColumn}>
+        <GestureIcon 
+          iconName="home" 
+          onLongPress={() => Alert.alert("Вы нажали на дом!")} 
+          onPanGesture={() => Alert.alert("Перетаскивание дома!")} 
+          onPinch={() => Alert.alert("Сжатие дома!")}
+        />
+        <GestureIcon 
+          iconName="account" 
+          onLongPress={() => Alert.alert("Вы нажали на аккаунт!")} 
+          onPanGesture={() => Alert.alert("Перетаскивание аккаунта!")} 
+          onPinch={() => Alert.alert("Сжатие аккаунта!")}
+        />
+        <GestureIcon 
+          iconName="settings" 
+          onLongPress={() => Alert.alert("Вы нажали на настройки!")} 
+          onPanGesture={() => Alert.alert("Перетаскивание настроек!")} 
+          onPinch={() => Alert.alert("Сжатие настроек!")}
+        />
+        <GestureIcon 
+          iconName="bell" 
+          onLongPress={() => Alert.alert("Вы нажали на колокол!")} 
+          onPanGesture={() => Alert.alert("Перетаскивание колокола!")} 
+          onPinch={() => Alert.alert("Сжатие колокола!")}
+        />
+        <GestureIcon 
+          iconName="star" 
+          onLongPress={() => Alert.alert("Вы нажали на звезду!")} 
+          onPanGesture={() => Alert.alert("Перетаскивание звезды!")} 
+          onPinch={() => Alert.alert("Сжатие звезды!")}
+        />
+        <GestureIcon 
+          iconName="heart" 
+          onLongPress={() => Alert.alert("Вы нажали на сердце!")} 
+          onPanGesture={() => Alert.alert("Перетаскивание сердца!")} 
+          onPinch={() => Alert.alert("Сжатие сердца!")}
+        />
+      </View>
+    </GestureHandlerRootView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f0f0f0",
+  },
+  iconColumn: {
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  iconContainer: {
+    marginVertical: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    width: 100,
+    height: 100,
+  },
+});

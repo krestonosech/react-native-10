@@ -1,109 +1,30 @@
-import React, { useState } from 'react';
-import { View, Button, Text } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { COLORS } from './constants';
+import Categories from './src/components/categories';
+import Header from './src/components/Header';
+import Popular from './src/components/Popular';
+import ProductDetail from './src/components/ProductDetail';
 
-const HelloWorldComponent = () => {
-const [randomNumber, setRandomNumber] = useState(null);
+const Stack = createNativeStackNavigator();
 
-const generateRandomNumber = () => {
-const randomNum = Math.floor(Math.random() * 100) + 1;
-setRandomNumber(randomNum);
-};
-return (
-<View style={{
-backgroundColor: 'black',
-marginTop: 50,
-}}
->
-<Text style={{
-display: 'flex',
-justifyContent: 'center',
-color: 'white',
-}}
->
-Hello World
-</Text>
-<View
-style={{
-display: 'flex',
-justifyContent: 'center',
-width: '100%',
-height: 50,
-alignItems: 'center',
-backgroundColor: 'black'
-}}
->
-<Text
-style={{
-fontSize: 17,
-color: 'white',
-}}
->Приложение для генерации случайного числа</Text>
-<Text
-style={{
-fontSize: 17,
-color: 'white',
-}}
->от 1 до 100</Text>
-</View>
-<View
-style={{
-display: 'flex',
-justifyContent: 'center',
-width: '100%',
-height: 100,
-alignItems: 'center',
-backgroundColor: 'black',
-}}
->
-<Text style={{
-color: 'white',
-}}>Нажмите на кнопку ниже</Text>
-<Text style={{
-color: 'white',
-}}>для генерации числа</Text>
-</View>
-<View style={{
-borderWidth: 2,
-borderColor: 'white',
-borderRadius: 10,
-margin: 15,
-}}
->
-<Button title="Сгенерировать" onPress={generateRandomNumber} />
-{randomNumber && <Text style={{
-color: 'white',
-display: 'flex',
-justifyContent: 'center',
-}}>Случайное число: {randomNumber}</Text>}
-</View>
-<View
-style={{
-display: 'flex',
-justifyContent: 'center',
-width: '100%',
-height: '70%',
-marginBottom: 0,
-alignItems: 'center',
-backgroundColor: 'black',
-}}
->
-<Text style={{
-color: 'white',
-}}>Приложение может пользоваться любой</Text>
-<Text style={{
-color: 'white',
-}}>пятиклассник, при желании можно</Text>
-<Text style={{
-color: 'white',
-}}>усовершенствовать программу,</Text>
-<Text style={{
-color: 'black',
-}}>но мне лень))</Text>
-</View>
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="ProductDetail" component={ProductDetail} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
 
-</View>
-
+const HomeScreen = () => (
+  <View style={{ padding: 24, paddingTop: 55, paddingBottom: 75, backgroundColor: COLORS.green }}>
+    <Header />
+    <Categories />
+    <Popular />
+  </View>
 );
-};
-
-export default HelloWorldComponent;
